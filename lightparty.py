@@ -8,10 +8,8 @@ import neopixel
 
 class RaspberryPiService(my_proto_pb2_grpc.RaspberryPiServicer):
     def ExecuteCommand(self, request, context):
-        MAX_LEDS = 30
         command = request.command
         print(f"Received command: {command}")
-        pixels1 = neopixel.NeoPixel(board.D18, MAX_LEDS, brightness=1)
 
         # Add your logic to process the command here
 
@@ -43,6 +41,8 @@ class RaspberryPiService(my_proto_pb2_grpc.RaspberryPiServicer):
         return response
 
 def serve():
+    MAX_LEDS = 144
+    pixels1 = neopixel.NeoPixel(board.D18, MAX_LEDS, brightness=1.0)
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     my_proto_pb2_grpc.add_RaspberryPiServicer_to_server(RaspberryPiService(), server)
     server.add_insecure_port('[::]:50051')
